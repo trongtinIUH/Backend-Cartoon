@@ -20,6 +20,7 @@ public class DynamoDBInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         createTableIfNotExists(User.class, "User");
 
+
     }
 
     private <T> void createTableIfNotExists(Class<T> clazz, String tableName) {
