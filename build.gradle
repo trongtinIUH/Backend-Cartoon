@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2' // Đảm bảo phiên bản phù hợp với Jackson hiện tại
 
     implementation 'software.amazon.awssdk:http-client-spi:2.29.43'
+
+
 }
 
 dependencyManagement {

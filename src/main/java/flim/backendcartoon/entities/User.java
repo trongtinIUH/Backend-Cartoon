@@ -11,9 +11,10 @@ import java.util.List;
 public class User {
 
     private  String userId;
-    private String soDienThoai;
+    private String phoneNumber;
     private  String userName;
     private  String createdAt;
+    private String dob;
     private List<String>  movieIds;
 
     @DynamoDbPartitionKey
@@ -25,14 +26,22 @@ public class User {
         this.userId = userId;
     }
 
+    @DynamoDbAttribute("dob")
+    public String getDob() {
+        return dob;
+    }
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
 
-    @DynamoDbAttribute("soDienThoai")
-    public String getSoDienThoai() {
-        return soDienThoai;
+    @DynamoDbAttribute("phoneNumber")
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
+
     @DynamoDbAttribute("userName")
     public String getUserName() {
         return userName;

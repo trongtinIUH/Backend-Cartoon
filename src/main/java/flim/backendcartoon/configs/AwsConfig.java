@@ -15,9 +15,15 @@ import software.amazon.awssdk.services.sns.SnsClient;
 
 @Configuration
 public class AwsConfig {
-    private final String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
-    private final String secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
-    private final String region = System.getenv("AWS_REGION");
+//    private final String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
+//    private final String secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
+//    private final String region = System.getenv("AWS_REGION");
+
+    private final Dotenv dotenv = Dotenv.load();
+
+    private final String accessKey = dotenv.get("AWS_ACCESS_KEY_ID");
+    private final String secretKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
+    private final String region = dotenv.get("AWS_REGION");
 
     @Bean
     public DynamoDbClient dynamoDbClient() {

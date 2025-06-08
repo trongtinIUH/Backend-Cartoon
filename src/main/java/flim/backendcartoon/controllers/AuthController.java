@@ -14,8 +14,8 @@ import software.amazon.awssdk.services.sns.model.CreateSmsSandboxPhoneNumberRequ
 import software.amazon.awssdk.services.cognitoidentityprovider.model.GetUserRequest;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.VerifySmsSandboxPhoneNumberRequest;
-import vn.edu.iuh.fit.model.User;
-import vn.edu.iuh.fit.service.UserService;
+import flim.backendcartoon.entities.User;
+
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -37,9 +37,11 @@ public class AuthController {
     @Autowired
     private UserServices userService;
 
-    private final String userPoolId = System.getenv("AWS_COGNITO_USER_POOL_ID");
-    private final String clientId = System.getenv("AWS_COGNITO_CLIENT_ID");
-    private final String clientSecret = System.getenv("AWS_COGNITO_CLIENT_SECRET");
+
+    private final Dotenv dotenv = Dotenv.load();
+    private final String userPoolId = dotenv.get("AWS_COGNITO_USER_POOL_ID");
+    private final String clientId = dotenv.get("AWS_COGNITO_CLIENT_ID");
+    private final String clientSecret = dotenv.get("AWS_COGNITO_CLIENT_SECRET");
 
     private final Map<String, String> otpStore = new ConcurrentHashMap<>(); // Lưu OTP tạm thời
     private final Map<String, String> tempUserStore = new ConcurrentHashMap<>(); // Lưu thông tin tạm thời (password)
@@ -140,9 +142,9 @@ public class AuthController {
             // Tạo User trong dynamodb
             // Chuyển đổi userMap thành đối tượng User
             User user = new User();
-            user.setId(userMap.get("id"));
+            user.setUserId(userMap.get("userId"));
             user.setDob(userMap.get("dob"));
-            user.setName(userMap.get("name"));
+            user.setUserName(userMap.get("userName"));
             user.setPhoneNumber(userMap.get("phoneNumber"));
 
             userService.createUser(user);
