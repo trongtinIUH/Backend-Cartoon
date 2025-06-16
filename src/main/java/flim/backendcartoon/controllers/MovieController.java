@@ -1,6 +1,9 @@
 package flim.backendcartoon.controllers;
 
+import flim.backendcartoon.entities.DTO.MovieDetailDTO;
+import flim.backendcartoon.entities.Episode;
 import flim.backendcartoon.entities.Movie;
+import flim.backendcartoon.services.EpisodeService;
 import flim.backendcartoon.services.MovieServices;
 import flim.backendcartoon.services.S3Services;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +25,16 @@ public class MovieController {
 
     @Autowired
     private MovieServices movieServices;
+    @Autowired
+    private EpisodeService episodeService;
 
-    @PostMapping(value = "/upload-video", consumes = "multipart/form-data")
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
     public ResponseEntity<?> uploadMovie(
             @RequestParam("title") String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam("userId") String userId,
             @RequestParam(value = "role", required = true) String role,
             @RequestParam(value = "genres", required = false) List<String> genres,
-            @RequestPart("video") MultipartFile video,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail
     ) {
         try {
@@ -38,7 +42,7 @@ public class MovieController {
             if( role == null || !role.equals("ADMIN")) {
                 return ResponseEntity.status(403).body("Chỉ admin mới có quyền upload video");
             }
-            String videoUrl = s3Service.uploadVideo(video);
+
             String thumbnailUrl = s3Service.uploadThumbnail(thumbnail);
 
             Movie movie = new Movie();
@@ -48,8 +52,8 @@ public class MovieController {
             movie.setUserId(userId);
             movie.setGenres(genres);
             movie.setCreatedAt(Instant.now().toString());
-            movie.setVideoUrl(videoUrl);
             movie.setThumbnailUrl(thumbnailUrl);
+
 
             movieServices.saveMovie(movie);
 
@@ -96,7 +100,9 @@ public class MovieController {
             if (movie == null) {
                 return ResponseEntity.status(404).body("Movie not found with ID: " + movieId);
             }
-            return ResponseEntity.ok(movie);
+            List<Episode> episodes = episodeService.findEpisodesByMovieId(movieId); // bạn cần inject episodeService
+            MovieDetailDTO movieDetail = new MovieDetailDTO(movie, episodes);
+            return ResponseEntity.ok(movieDetail);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Failed to retrieve movie: " + e.getMessage());
@@ -119,7 +125,7 @@ public class MovieController {
             existingMovie.setDescription(updatedMovie.getDescription());
             existingMovie.setGenres(updatedMovie.getGenres());
             existingMovie.setThumbnailUrl(updatedMovie.getThumbnailUrl());
-            existingMovie.setVideoUrl(updatedMovie.getVideoUrl());
+
 
             movieServices.updateMovie(existingMovie);
 

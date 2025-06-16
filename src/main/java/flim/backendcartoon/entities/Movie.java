@@ -12,7 +12,6 @@ public class Movie {
     private String title;
     private String description;
     private String thumbnailUrl;
-    private String videoUrl;
     private String createdAt;
     private String userId;
     private List<String> genres;
@@ -35,9 +34,7 @@ public class Movie {
     public String getThumbnailUrl() { return thumbnailUrl; }
     public void setThumbnailUrl(String thumbnailUrl) { this.thumbnailUrl = thumbnailUrl; }
 
-    @DynamoDbAttribute("videoUrl")
-    public String getVideoUrl() { return videoUrl; }
-    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+
     @DynamoDbAttribute("createdAt")
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
