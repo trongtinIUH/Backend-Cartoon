@@ -10,7 +10,6 @@ public interface UserServices {
     User findUserById(String id);
     User findUserByPhoneNumber(String phoneNumber);
     List<User> findAllUsers();
-    User findUserById_ttt(String id);
     void updateUser(User user);
 
 }

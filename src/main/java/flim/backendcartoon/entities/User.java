@@ -16,6 +16,7 @@ public class User {
     private  String createdAt;
     private String dob;
     private List<String>  movieIds;
+    private Role role;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("userId")
@@ -62,6 +63,14 @@ public class User {
     }
     public void setMovieIds(List<String> movieIds) {
         this.movieIds = movieIds;
+    }
+
+    @DynamoDbAttribute("role")
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 }

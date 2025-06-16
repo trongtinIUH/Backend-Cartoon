@@ -1,5 +1,6 @@
 package flim.backendcartoon.controllers;
 
+import flim.backendcartoon.entities.Role;
 import flim.backendcartoon.entities.User;
 import flim.backendcartoon.services.UserServices;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -146,6 +147,8 @@ public class AuthController {
             user.setDob(userMap.get("dob"));
             user.setUserName(userMap.get("userName"));
             user.setPhoneNumber(userMap.get("phoneNumber"));
+            //role mặt định là USER
+            user.setRole(Role.USER);
 
             userService.createUser(user);
 

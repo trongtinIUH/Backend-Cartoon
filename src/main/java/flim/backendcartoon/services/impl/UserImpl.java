@@ -39,11 +39,6 @@ public class UserImpl implements UserServices {
     }
 
     @Override
-    public User findUserById_ttt(String id) {
-        return userRepository.findById_ttt(id);
-    }
-
-    @Override
     public void updateUser(User user) {
         userRepository.save(user);
     }

@@ -21,7 +21,9 @@ public class DynamoDBInitializer implements CommandLineRunner {
     }
     @Override
     public void run(String... args) {
+
         createTableIfNotExists(User.class, "User");
+        createTableIfNotExists(Movie.class, "Movie");
     }
 
     private <T> void createTableIfNotExists(Class<T> clazz, String tableName) {

@@ -74,26 +74,26 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody Map<String, String> payload) {
-        try {
-            String newName = payload.get("userName");
-
-
-            User user = userService.findUserById_ttt(id);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: " + id);
-            }
-
-            if (newName != null && !newName.trim().isEmpty()) {
-                user.setUserName(newName);
-            }
-            userService.createUser(user);
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
-        }
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody Map<String, String> payload) {
+//        try {
+//            String newName = payload.get("userName");
+//
+//
+//            User user = userService.findUserById_ttt(id);
+//            if (user == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: " + id);
+//            }
+//
+//            if (newName != null && !newName.trim().isEmpty()) {
+//                user.setUserName(newName);
+//            }
+//            userService.createUser(user);
+//            return ResponseEntity.ok(user);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
+//        }
+//    }
 
 }
