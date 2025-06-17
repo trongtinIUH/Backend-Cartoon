@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -54,5 +55,12 @@ public class EpisodeController {
     public ResponseEntity<?> getEpisodesByMovie(@PathVariable String movieId) {
         List<Episode> episodes = episodeService.findEpisodesByMovieId(movieId);
         return ResponseEntity.ok(episodes);
+    }
+
+    //countEpisodesByMovieId
+    @GetMapping("/count/{movieId}")
+    public ResponseEntity<?> countEpisodesByMovieId(@PathVariable String movieId) {
+        int count = episodeService.countEpisodesByMovieId(movieId);
+        return ResponseEntity.ok(Map.of("count", count)); // ✅ bọc trong object JSON
     }
 }

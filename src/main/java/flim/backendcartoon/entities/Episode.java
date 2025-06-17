@@ -3,6 +3,7 @@ package flim.backendcartoon.entities;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 @DynamoDbBean
 public class Episode {
@@ -22,6 +23,7 @@ public class Episode {
     public void setMovieId(String movieId) {
         this.movieId = movieId;
     }
+    @DynamoDbSortKey
     @DynamoDbAttribute("episodeId")
     public String getEpisodeId() {
         return episodeId;

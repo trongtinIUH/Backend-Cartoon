@@ -25,4 +25,10 @@ public class EpisodeServiceImpl implements EpisodeService {
     public List<Episode> findEpisodesByMovieId(String movieId) {
         return episodeRepository.findByMovieId(movieId);
     }
+
+    @Override
+    public int countEpisodesByMovieId(String movieId) {
+        List<Episode> episodes = episodeRepository.findByMovieId(movieId);
+        return episodes.size();
+    }
 }
