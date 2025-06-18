@@ -7,6 +7,7 @@ import flim.backendcartoon.services.EpisodeService;
 import flim.backendcartoon.services.MovieServices;
 import flim.backendcartoon.services.S3Services;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -110,10 +111,11 @@ public class MovieController {
     }
 
     //update movie
-    @PutMapping("/{movieId}")
+    @PutMapping(value = "/{movieId}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateMovie(
             @PathVariable String movieId,
-            @RequestBody Movie updatedMovie) {
+            @ModelAttribute Movie updatedMovie,
+            @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
         try {
             Movie existingMovie = movieServices.findMovieById(movieId);
             if (existingMovie == null) {
@@ -124,7 +126,13 @@ public class MovieController {
             existingMovie.setTitle(updatedMovie.getTitle());
             existingMovie.setDescription(updatedMovie.getDescription());
             existingMovie.setGenres(updatedMovie.getGenres());
-            existingMovie.setThumbnailUrl(updatedMovie.getThumbnailUrl());
+
+            // Xử lý lưu file và cập nhật thumbnailUrl nếu có file mới
+            if (thumbnail != null && !thumbnail.isEmpty()) {
+                String thumbnailUrl = s3Service.uploadThumbnail(thumbnail); // bạn cần tự xử lý lưu file này
+                existingMovie.setThumbnailUrl(thumbnailUrl);
+            }
+
 
 
             movieServices.updateMovie(existingMovie);
