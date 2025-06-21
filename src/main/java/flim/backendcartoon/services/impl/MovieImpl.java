@@ -74,4 +74,20 @@ public class MovieImpl implements MovieServices {
             movieReponsitory.deleteById(id);
         }
     }
+
+    @Override
+    public List<Movie> findAllMoviesByGenre(String genre) {
+        return movieReponsitory.findAllMovies()
+                .stream()
+                .filter(movie -> movie.getGenres() != null && movie.getGenres().contains(genre))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Movie> findMoviesByTitleContaining(String title) {
+        return movieReponsitory.findAllMovies()
+                .stream()
+                .filter(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
+    }
 }

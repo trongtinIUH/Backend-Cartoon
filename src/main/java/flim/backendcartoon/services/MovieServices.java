@@ -15,4 +15,8 @@ public interface MovieServices {
     Long increaseViewCount(String movieId);
     //xoa nhiu movie
     void deleteMoviesByIds(List<String> ids);
+    //ti phim theo thể loại
+    List<Movie> findAllMoviesByGenre(String genre);
+    // tìm phim với title chứa từ khóa
+    List<Movie> findMoviesByTitleContaining(String title);
 }

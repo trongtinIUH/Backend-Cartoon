@@ -8,11 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -59,41 +60,35 @@ public class UserController {
         return ResponseEntity.ok(users); // HTTP 200 và trả về danh sách người dùng
     }
 
-    @GetMapping("/searchFriend")
-    public ResponseEntity<?> searchUser(@RequestParam String phoneNumber) {
-        try {
-            User user = userService.findUserByPhoneNumber(phoneNumber); // Xử lý tìm kiếm
-            if (user != null) {
-                return ResponseEntity.ok(user);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();  // In chi tiết lỗi ra log
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy người dùng với ID: " + id);
         }
+        return ResponseEntity.ok(user);
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody Map<String, String> payload) {
-//        try {
-//            String newName = payload.get("userName");
-//
-//
-//            User user = userService.findUserById_ttt(id);
-//            if (user == null) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: " + id);
-//            }
-//
-//            if (newName != null && !newName.trim().isEmpty()) {
-//                user.setUserName(newName);
-//            }
-//            userService.createUser(user);
-//            return ResponseEntity.ok(user);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
-//        }
-//    }
+    //update user
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
+        if (user.getUserName() == null) {
+            return ResponseEntity.badRequest().body("Thông tin người dùng không hợp lệ");
+        }
+
+        User existingUser = userService.findUserById(id);
+        if (existingUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy người dùng với ID: " + id);
+        }
+
+        // Cập nhật thông tin người dùng
+        existingUser.setUserName(user.getUserName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setDob(user.getDob());
+
+        userService.updateUser(existingUser);
+        return ResponseEntity.ok("User updated successfully!");
+    }
 
 }

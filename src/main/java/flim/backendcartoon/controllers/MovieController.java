@@ -157,5 +157,36 @@ public class MovieController {
         }
     }
 
-    
+
+    //tìm phim theo thể loại
+    @GetMapping("/genre/{genre}")
+    public ResponseEntity<List<Movie>> getMoviesByGenre(
+            @PathVariable String genre) {
+        try {
+            List<Movie> movies = movieServices.findAllMoviesByGenre(genre);
+            if (movies.isEmpty()) {
+                return ResponseEntity.noContent().build(); // HTTP 204 nếu không có phim nào
+            }
+            return ResponseEntity.ok(movies); // HTTP 200 và trả về danh sách phim
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
+    //tìm phim theo title chứa từ khóa
+    @GetMapping("/search")
+    public ResponseEntity<List<Movie>> searchMoviesByTitle(
+            @RequestParam String title) {
+        try {
+            List<Movie> movies = movieServices.findMoviesByTitleContaining(title);
+            if (movies.isEmpty()) {
+                return ResponseEntity.noContent().build(); // HTTP 204 nếu không có phim nào
+            }
+            return ResponseEntity.ok(movies); // HTTP 200 và trả về danh sách phim
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
 }
